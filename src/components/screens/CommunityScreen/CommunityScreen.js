@@ -2,13 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { rgba } from 'polished';
-import { StaticQuery, graphql } from 'gatsby';
 
 import { Button, Icon, styles } from '@storybook/design-system';
 import useSiteMetadata from '../../lib/useSiteMetadata';
 
 import { LazyLoad, SocialGraph } from '../../basics';
-import PageLayout from '../../layout/PageLayout';
 import CommunityHero from './CommunityHero';
 import CommunitySocial from './CommunitySocial';
 import CommunitySidebar from './CommunitySidebar';
@@ -154,7 +152,7 @@ const CommunityLayout = styled.div`
   }
 `;
 
-export function PureCommunityScreen({ data: { gitHubRepoData }, ...props }) {
+export function PureCommunityScreen({ ...props }) {
   const { title, ogImage, urls = {} } = useSiteMetadata();
   const {
     home,
@@ -169,14 +167,15 @@ export function PureCommunityScreen({ data: { gitHubRepoData }, ...props }) {
     openCollective,
   } = urls;
   return (
-    <PageLayout {...props}>
+    <>
       <SocialGraph
         title={`Community | ${title}`}
         desc="Join thousands of frontend developers to learn new Storybook techniques, get help, and develop UIs faster."
         url={`${home}/community`}
         image={ogImage}
       />
-      <CommunityHero gitHubRepoData={gitHubRepoData} />
+
+      <CommunityHero />
 
       <CommunitySocial />
 
@@ -240,7 +239,7 @@ export function PureCommunityScreen({ data: { gitHubRepoData }, ...props }) {
               image={<img src={DocsSVG} alt="docs" />}
               title="Write and update docs"
               desc="Teach fellow developers how to take advantage of Storybook. Help write, edit, and improve docs."
-              links={[{ title: 'Get started with docs', href: docs.home }]}
+              links={[{ title: 'Get started with docs', href: docs }]}
             />
             <Item
               image={<img src={PullRequestSVG} alt="pull request" />}
@@ -374,7 +373,7 @@ export function PureCommunityScreen({ data: { gitHubRepoData }, ...props }) {
           </LogoLink>
         </OpenCollectiveLogos>
       </CommunityLayout>
-    </PageLayout>
+    </>
   );
 }
 
@@ -383,19 +382,5 @@ PureCommunityScreen.propTypes = {
 };
 
 export default function CommunityScreen(props) {
-  return (
-    <StaticQuery
-      query={graphql`
-        query CommunityScreenQuery {
-          gitHubRepoData {
-            contributorCount
-            author
-            name
-            url
-          }
-        }
-      `}
-      render={data => <PureCommunityScreen data={data} {...props} />}
-    />
-  );
+  return <PureCommunityScreen {...props} />;
 }

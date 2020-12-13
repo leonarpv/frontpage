@@ -1,9 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
-import GitHubButton from 'react-github-button';
-
-import 'react-github-button/assets/style.css';
 
 import {
   Button,
@@ -21,15 +18,8 @@ import { Cardinal, Video } from '../../basics';
 import useSiteMetadata from '../../lib/useSiteMetadata';
 import PlaceholderAspectRatio from '../../layout/PlaceholderAspectRatio';
 import NpmDownloadCount from '../../layout/NpmDownloadCount';
-
-import ReactSVG from '../../../images/logos/framework/icon-react.svg';
-import VueSVG from '../../../images/logos/framework/icon-vue.svg';
-import AngularSVG from '../../../images/logos/framework/icon-angular.svg';
-import EmberSVG from '../../../images/logos/framework/icon-ember.svg';
-import HtmlSVG from '../../../images/logos/framework/icon-html.svg';
-import SvelteSVG from '../../../images/logos/framework/icon-svelte.svg';
-import MithrilSVG from '../../../images/logos/framework/icon-mithril.svg';
-import RiotSVG from '../../../images/logos/framework/icon-riot.svg';
+import stylizeFramework from '../../../util/stylize-framework';
+import GatsbyLinkWrapper from '../../basics/GatsbyLinkWrapper';
 
 const { color, typography, breakpoint, pageMargins } = styles;
 
@@ -206,10 +196,17 @@ const FrameworkLink = styled(Link)`
 
 const FrameworkItem = styled.div`
   display: flex;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   margin-bottom: 0.75rem;
+
+  a {
+    overflow: hidden;
+  }
+
+  a > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
   @media (min-width: ${breakpoint * 2}px) {
     &:last-child {
@@ -269,33 +266,6 @@ const Stats = styled.div`
   }
 `;
 
-const GitHubWrapper = styled.div`
-  margin-bottom: 0.75rem;
-
-  @media (min-width: ${breakpoint * 2}px) {
-    ${'' /* this has a bit different styling than stats children */};
-    margin-bottom: 1.25rem;
-  }
-
-  ${'' /* Overrides to make a medium-sized button */};
-  .github-btn {
-    font: bold 12px/14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    display: block;
-
-    height: auto;
-    .gh-btn,
-    .gh-count {
-      padding: 2px 6px;
-    }
-
-    .gh-ico {
-      height: 12px;
-      width: 12px;
-      margin-top: 1px;
-    }
-  }
-`;
-
 const SecondarySubheading = styled(Subheading)`
   font-size: 11px;
   display: block;
@@ -347,32 +317,19 @@ const Wrapper = styled.div`
   }
 `;
 
-function Framework({ framework, ...props }) {
-  let logoSVG;
+const getFrameworkLogo = (framework) => {
+  if (framework === 'rax') return '/frameworks/logo-rax.png';
+  return `/frameworks/logo-${framework}.svg`;
+};
 
-  if (framework === 'React' || framework === 'React Native') {
-    logoSVG = ReactSVG;
-  } else if (framework === 'Vue') {
-    logoSVG = VueSVG;
-  } else if (framework === 'Angular') {
-    logoSVG = AngularSVG;
-  } else if (framework === 'Ember') {
-    logoSVG = EmberSVG;
-  } else if (framework === 'HTML') {
-    logoSVG = HtmlSVG;
-  } else if (framework === 'Svelte') {
-    logoSVG = SvelteSVG;
-  } else if (framework === 'Mithril') {
-    logoSVG = MithrilSVG;
-  } else if (framework === 'Riot') {
-    logoSVG = RiotSVG;
-  }
+function Framework({ framework, ...props }) {
+  const logo = getFrameworkLogo(framework);
 
   return (
     <FrameworkItem>
-      <FrameworkLink className="primary" {...props} withArrow>
-        <img src={logoSVG} alt={framework} />
-        <span>{framework}</span>
+      <FrameworkLink className="primary" {...props} LinkWrapper={GatsbyLinkWrapper} withArrow>
+        <img src={logo} alt={framework} />
+        <span>{stylizeFramework(framework)}</span>
       </FrameworkLink>
     </FrameworkItem>
   );
@@ -388,13 +345,15 @@ Framework.defaultProps = {
   logo: undefined,
 };
 
-export default function Hero({
-  gitHubRepoData: { contributorCount, url: githubUrl, author, name },
-  startOpen,
-  ...props
-}) {
-  const { latestVersion, urls = {} } = useSiteMetadata();
-  const { docs = {}, framework = {} } = urls;
+export default function Hero({ startOpen, ...props }) {
+  const {
+    coreFrameworks,
+    communityFrameworks,
+    latestVersion,
+    urls = {},
+    contributorCount,
+  } = useSiteMetadata();
+  const { docs = {}, gitHub = {} } = urls;
 
   const Modal = () => (
     <AspectRatio ratio={0.5625}>
@@ -419,10 +378,10 @@ export default function Hero({
         <Title>Build bulletproof UI components faster</Title>
         <Subtitle>
           Storybook is an open source tool for developing UI components in isolation for React, Vue,
-          and Angular. It makes building stunning UIs organized and efficient.
+          Angular, and more. It makes building stunning UIs organized and efficient.
         </Subtitle>
         <PitchActions>
-          <Button appearance="primary" isLink href={docs.home}>
+          <Button appearance="primary" isLink href={docs}>
             Get Started
           </Button>
           <WithModal startOpen={startOpen} modal={Modal}>
@@ -495,38 +454,29 @@ export default function Hero({
         <Secondary>
           <SecondarySubheading>Made for</SecondarySubheading>
           <FrameworkList>
-            <Framework framework="React" href={framework.react} />
-            <Framework framework="React Native" href={framework.reactNative} />
-            <Framework framework="Vue" href={framework.vue} />
-            <Framework framework="Angular" href={framework.angular} />
-            <Framework framework="Ember" href={framework.ember} />
-            <Framework framework="HTML" href={framework.html} />
-            <Framework framework="Svelte" href={framework.svelte} />
-            <Framework framework="Mithril" href={framework.mithril} />
-            <Framework framework="Riot" href={framework.riot} />
+            {[...coreFrameworks, ...communityFrameworks].map((framework) => (
+              <Framework key={framework} framework={framework} href={`/docs/${framework}`} />
+            ))}
           </FrameworkList>
           <SecondarySubheading>GitHub</SecondarySubheading>
 
           <Stats>
-            <GitHubWrapper className="chromatic-ignore">
-              <GitHubButton type="stargazers" namespace={author} repo={name} />
-            </GitHubWrapper>
             <Stat
               size="small"
               count={latestVersion}
               text="Latest version"
               noPlural
               status="primary"
-              countLink={`${githubUrl}/releases`}
+              countLink={gitHub.releases}
             />
             <NpmDownloadStat className="chromatic-ignore" />
             <Stat
               size="small"
-              count={`+${contributorCount}`}
+              count={`${contributorCount}+`}
               text="Contributors"
               noPlural
               status="tertiary"
-              countLink={`${githubUrl}/graphs/contributors`}
+              countLink={gitHub.contributors}
             />
           </Stats>
         </Secondary>
@@ -536,12 +486,6 @@ export default function Hero({
 }
 
 Hero.propTypes = {
-  gitHubRepoData: PropTypes.shape({
-    contributorCount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    url: PropTypes.string.isRequired,
-    author: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  }).isRequired,
   startOpen: PropTypes.bool,
 };
 

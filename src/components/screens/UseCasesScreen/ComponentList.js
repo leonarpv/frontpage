@@ -1,7 +1,6 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import styled, { css } from 'styled-components';
-import { hoistStatics, compose, withState } from 'recompose';
+import styled from 'styled-components';
 
 import { styles, animation } from '@storybook/design-system';
 
@@ -23,9 +22,9 @@ const Toggle = styled(LogoToggle)`
     animation: ${shake} 10s ease-in-out infinite 5s;
   }
 
-  ${props =>
+  ${(props) =>
     props.clicked &&
-    css`
+    `
       > * {
         animation: none !important;
       }
@@ -75,7 +74,7 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-function ComponentList({ selectedIndex, onSelectIndex, ...props }) {
+function PureComponentList({ selectedIndex, onSelectIndex, ...props }) {
   return (
     <Wrapper {...props}>
       <Toggle
@@ -85,7 +84,6 @@ function ComponentList({ selectedIndex, onSelectIndex, ...props }) {
         onSelectIndex={onSelectIndex}
         clicked={selectedIndex !== 0}
       />
-      {/* eslint-disable react/no-array-index-key */}
 
       {selectedIndex === 0 && (
         <Fragment>
@@ -171,14 +169,19 @@ function ComponentList({ selectedIndex, onSelectIndex, ...props }) {
   );
 }
 
-ComponentList.propTypes = {
+PureComponentList.propTypes = {
   onSelectIndex: PropTypes.func,
   selectedIndex: PropTypes.number,
 };
 
-ComponentList.defaultProps = {
+PureComponentList.defaultProps = {
   onSelectIndex: () => 0,
   selectedIndex: undefined,
 };
 
-export default hoistStatics(compose(withState('selectedIndex', 'onSelectIndex', 0)))(ComponentList);
+export default function ComponentList(props) {
+  const [selectedIndex, onSelectIndex] = useState(0);
+  return (
+    <PureComponentList selectedIndex={selectedIndex} onSelectIndex={onSelectIndex} {...props} />
+  );
+}

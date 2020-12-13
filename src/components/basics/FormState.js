@@ -19,7 +19,7 @@ function defaultBindings({ field, props, $try }) {
     'error',
   ];
   const bindings = {};
-  keys.forEach(key => {
+  keys.forEach((key) => {
     bindings[key] = $try(props[key], field[key]);
   });
   // For react keys
@@ -32,7 +32,6 @@ export default class FormData extends MobxReactForm {
     super(fields, { plugins, hooks, options });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   bindings() {
     return {
       Default: defaultBindings,

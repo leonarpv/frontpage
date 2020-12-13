@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Link, styles } from '@storybook/design-system';
-import PageLayout from '../../layout/PageLayout';
 import PageTitle from '../../layout/PageTitle';
 import Feature from '../../layout/Feature';
 import FeaturesLayout from '../../layout/FeaturesLayout';
@@ -25,7 +24,7 @@ export function PureSupportScreen({ ...props }) {
   const { title, ogImage, urls = {} } = useSiteMetadata();
   const { home, chat, docs = {}, gitHub = {} } = urls;
   return (
-    <PageLayout {...props}>
+    <>
       <SocialGraph
         title={`Support | ${title}`}
         desc="Get answers to your Storybook questions from the thriving community and maintainers. Developers of all skill levels welcome."
@@ -45,7 +44,7 @@ export function PureSupportScreen({ ...props }) {
           title="Check the docs"
           desc="First check the Storybook docs. There’s likely an article for your issue already."
         >
-          <Link withArrow href={docs.home}>
+          <Link withArrow href={docs}>
             Read docs
           </Link>
         </Feature>
@@ -68,7 +67,7 @@ export function PureSupportScreen({ ...props }) {
           </Link>
         </Feature>
       </Features>
-    </PageLayout>
+    </>
   );
 }
 

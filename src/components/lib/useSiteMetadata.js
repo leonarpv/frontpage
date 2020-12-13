@@ -10,6 +10,19 @@ const useSiteMetadata = () => {
           ogImage
           googleSiteVerification
           latestVersion
+          contributorCount
+          coreFrameworks
+          communityFrameworks
+          featureGroups {
+            name
+            features {
+              name
+              supported
+              unsupported
+              path
+              repoPath
+            }
+          }
           urls {
             gitHubOrg
             homepageUrl
@@ -49,16 +62,15 @@ const useSiteMetadata = () => {
               preact
             }
             home
-            docs {
-              home
-              addonInstruction
-            }
+            docs
+            releases
             tutorials
             addons
             community
             useCases
             support
             team
+            addonsApi
             blog
             medium
             twitter
@@ -69,19 +81,9 @@ const useSiteMetadata = () => {
             badge
             presentation
             video
-            framework {
-              react
-              reactNative
-              vue
-              angular
-              ember
-              html
-              svelte
-              mithril
-              riot
-            }
             officialAddons {
               knobs
+              controls
               actions
               source
               info
@@ -92,6 +94,7 @@ const useSiteMetadata = () => {
               accessibility
               console
               links
+              toolbars
             }
           }
         }

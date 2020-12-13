@@ -5,14 +5,14 @@ import { Button, Icon, Subheading, styles } from '@storybook/design-system';
 import useSiteMetadata from '../../lib/useSiteMetadata';
 
 import { SocialGraph } from '../../basics';
-import PageLayout from '../../layout/PageLayout';
 import PageTitle from '../../layout/PageTitle';
 import AddonItem from './AddonItem';
 import AddonList from './AddonList';
 import AddonCustom from './AddonCustom';
 import CTA from '../../layout/CTA';
+import GatsbyLinkWrapper from '../../basics/GatsbyLinkWrapper';
 
-import KnobsSVG from '../../../images/addons/knobs.svg';
+import ControlsSVG from '../../../images/addons/knobs.svg';
 import ActionsSVG from '../../../images/addons/actions.svg';
 import SourceSVG from '../../../images/addons/source.svg';
 import DocsSVG from '../../../images/addons/docs.svg';
@@ -21,6 +21,7 @@ import AccessibilitySVG from '../../../images/addons/accessibility.svg';
 import StoryshotsSVG from '../../../images/addons/storyshots.svg';
 import ConsoleSVG from '../../../images/addons/console.svg';
 import LinksSVG from '../../../images/addons/links.svg';
+import ToolbarsSVG from '../../../images/addons/toolbars.svg';
 import BackgroundsSVG from '../../../images/addons/backgrounds.svg';
 
 const { color, typography, spacing, pageMargins, breakpoint } = styles;
@@ -82,7 +83,7 @@ export function PureAddonScreen({ ...props }) {
   const { title, ogImage, urls = {} } = useSiteMetadata();
   const { home, officialAddons = {}, gitHub = {}, docs = {} } = urls;
   return (
-    <PageLayout {...props}>
+    <>
       <SocialGraph
         title={`Addons | ${title}`}
         desc="Addons enable advanced functionality and unlock new workflows. Contributed by core maintainers and the amazing developer community."
@@ -101,10 +102,19 @@ export function PureAddonScreen({ ...props }) {
       <AddonList appearance="official">
         <AddonItem
           appearance="official"
-          image={<img src={KnobsSVG} alt="knobs" />}
-          title="Knobs"
+          image={<img src={DocsSVG} alt="docs" />}
+          title="Docs"
+          desc="Document component usage and properties in Markdown"
+          addonUrl={officialAddons.docs}
+          LinkWrapper={GatsbyLinkWrapper}
+        />
+        <AddonItem
+          appearance="official"
+          image={<img src={ControlsSVG} alt="controls" />}
+          title="Controls"
           desc="Interact with component inputs dynamically in the Storybook UI"
-          addonUrl={officialAddons.knobs}
+          addonUrl={officialAddons.controls}
+          LinkWrapper={GatsbyLinkWrapper}
         />
         <AddonItem
           appearance="official"
@@ -112,6 +122,31 @@ export function PureAddonScreen({ ...props }) {
           title="Actions"
           desc="Get UI feedback when an action is performed on an interactive element."
           addonUrl={officialAddons.actions}
+          LinkWrapper={GatsbyLinkWrapper}
+        />
+        <AddonItem
+          appearance="official"
+          image={<img src={ViewPortSVG} alt="viewport" />}
+          title="Viewport"
+          desc="Build responsive components by adjusting Storybook’s viewport size and orientation"
+          addonUrl={officialAddons.viewport}
+          LinkWrapper={GatsbyLinkWrapper}
+        />
+        <AddonItem
+          appearance="official"
+          image={<img src={BackgroundsSVG} alt="backgrounds" />}
+          title="Backgrounds"
+          desc="Switch backgrounds to view components in different settings"
+          addonUrl={officialAddons.backgrounds}
+          LinkWrapper={GatsbyLinkWrapper}
+        />
+        <AddonItem
+          appearance="official"
+          image={<img src={ToolbarsSVG} alt="Toolbars" />}
+          title="Toolbars"
+          desc="Create your own toolbar items that control story rendering."
+          addonUrl={officialAddons.toolbars}
+          LinkWrapper={GatsbyLinkWrapper}
         />
         <AddonItem
           appearance="official"
@@ -122,31 +157,10 @@ export function PureAddonScreen({ ...props }) {
         />
         <AddonItem
           appearance="official"
-          image={<img src={DocsSVG} alt="docs" />}
-          title="Docs"
-          desc="Document component usage and properties in Markdown"
-          addonUrl={officialAddons.docs}
-        />
-        <AddonItem
-          appearance="official"
-          image={<img src={ViewPortSVG} alt="viewport" />}
-          title="Viewport"
-          desc="Build responsive components by adjusting Storybook’s viewport size and orientation"
-          addonUrl={officialAddons.viewport}
-        />
-        <AddonItem
-          appearance="official"
           image={<img src={StoryshotsSVG} alt="storyshots" />}
           title="Storyshots"
           desc="Take a code snapshot of every story automatically with Jest"
           addonUrl={officialAddons.storyshots}
-        />
-        <AddonItem
-          appearance="official"
-          image={<img src={BackgroundsSVG} alt="backgrounds" />}
-          title="Backgrounds"
-          desc="Switch backgrounds to view components in different settings"
-          addonUrl={officialAddons.backgrounds}
         />
         <AddonItem
           appearance="official"
@@ -215,11 +229,6 @@ export function PureAddonScreen({ ...props }) {
           desc="Navigate different versions of static Storybook builds to see how a component has changed over time."
           addonUrl="https://github.com/buildit/storybook-addon-versions"
         />
-        <AddonItem
-          title="Contexts"
-          desc="An elegant way to wrap your component stories and change their contextual environment directly and dynamically in Storybook UI!"
-          addonUrl="https://github.com/storybookjs/storybook/tree/master/addons/contexts"
-        />
 
         <Subheader>Test</Subheader>
         <AddonItem
@@ -243,11 +252,6 @@ export function PureAddonScreen({ ...props }) {
           addonUrl="https://github.com/tsuyoshiwada/storybook-chrome-screenshot"
         />
         <AddonItem
-          title="i18n"
-          desc="Toggle the locale and directly see the result in the preview. Intl library agnostic - can be used with any intl library. Supports automatic lrt/rtl change."
-          addonUrl="https://github.com/goooseman/storybook-addon-i18n"
-        />
-        <AddonItem
           title="Intl"
           desc="Toggle the locale and directly see the result in the preview."
           addonUrl="https://github.com/truffls/storybook-addon-intl"
@@ -261,6 +265,11 @@ export function PureAddonScreen({ ...props }) {
           title="Taffy"
           desc="Resize your responsive viewports dynamically with a draggable handle, exact px/em width inputs, or with one-click preset size buttons."
           addonUrl="https://github.com/DEGJS/storybook-addon-taffy"
+        />
+        <AddonItem
+          title="Matrix"
+          desc="Rendering components with a matrix of props. This addon can also be used with storyshots."
+          addonUrl="https://github.com/tomoya/storybook-addon-matrix"
         />
 
         <Subheader>Code</Subheader>
@@ -299,6 +308,11 @@ export function PureAddonScreen({ ...props }) {
           title="Code Preview"
           desc="Display code preview with user selected knobs in various framework code."
           addonUrl="https://github.com/naver/storybook-addon-preview"
+        />
+        <AddonItem
+          title="Open Component Code"
+          desc="Open the code of the component used in story directly in VS code (dev/local) and in Github repo (deployed/production)"
+          addonUrl="https://github.com/product-ride/storybook-addon-vscode-source"
         />
 
         <Subheader>Data & State</Subheader>
@@ -364,6 +378,11 @@ export function PureAddonScreen({ ...props }) {
           desc="Allows you to change the theme based on a css class name and adds a theme selection control to the Storybook panel."
           addonUrl="https://github.com/tonai/storybook-addon-themes"
         />
+        <AddonItem
+          title="React Theming Addon"
+          desc="Universal addon for developing themed React Apps, Components and Themes objects themselves. Supports Styled Components, Emotion, Material UI and any similar theming providers. Change colors dynamically and switch between themes. Edit props in themes of any shapes. Has API for extending under your needs."
+          addonUrl="https://github.com/react-theming/storybook-addon#storybook-addon--react-theming"
+        />
 
         <Subheader>Design</Subheader>
         <AddonItem
@@ -374,7 +393,7 @@ export function PureAddonScreen({ ...props }) {
         <AddonItem
           title="Figma"
           desc="Embed Figma designs in a storybook panel."
-          addonUrl="https://github.com/hharnisc/storybook-addon-figma"
+          addonUrl="https://github.com/pocka/storybook-addon-designs"
         />
         <AddonItem
           title="XD"
@@ -391,13 +410,34 @@ export function PureAddonScreen({ ...props }) {
           desc="Take an eye over the vertical rhythm of your stories with this decorator."
           addonUrl="https://github.com/jmlweb/storybook-vrhythm"
         />
+        <AddonItem
+          title="Mobile UX Hints"
+          desc="Suggestions on how to tweak the HTML and CSS of your components to be more mobile-friendly."
+          addonUrl="https://github.com/aholachek/storybook-mobile"
+        />
+        <AddonItem
+          title="Zeplin"
+          desc="Embed Zeplin designs in a storybook panel."
+          addonUrl="https://github.com/mertkahyaoglu/storybook-zeplin"
+        />
+        <AddonItem
+          title="Contrast"
+          desc="Embed Contrast handoff tool in a storybook panel."
+          addonUrl="https://github.com/toyboxsystems/storybook-contrast"
+        />
+
+        <Subheader>Appearance</Subheader>
+        <AddonItem
+          title="Dark Mode"
+          desc="Change Storybook to dark mode."
+          addonUrl="https://github.com/hipstersmoothie/storybook-dark-mode"
+        />
+
         <div>
           <Button
             appearance="secondaryOutline"
             isLink
-            href={`${
-              gitHub.frontpage
-            }/blob/master/src/components/screens/AddonScreen/AddonScreen.js#L158`}
+            href={`${gitHub.frontpage}/blob/master/src/components/screens/AddonScreen/AddonScreen.js#L158`}
           >
             <Icon icon="plus" /> Add your addon here
           </Button>
@@ -407,12 +447,12 @@ export function PureAddonScreen({ ...props }) {
       <CTA
         text={<span>Build UIs faster. Add Storybook to your project now.</span>}
         action={
-          <Button appearance="secondary" isLink href={docs.home}>
+          <Button appearance="secondary" isLink href={docs}>
             Get started
           </Button>
         }
       />
-    </PageLayout>
+    </>
   );
 }
 

@@ -15,7 +15,7 @@ Contributions welcome! If it’s something small like grammar or punctuation, op
 3. Integrate with Gatsby
 4. Ensure tests pass in [Circle CI storybooks/frontpage](https://circleci.com/gh/storybooks/frontpage)
 5. Ensure site works and is QAed via Netlify previews
-6. Ensure no visual bugs in [Chromatic storybooks/frontpage](https://www.chromaticqa.com/builds?appId=5be26744d2f6250024a9117d)
+6. Ensure no visual bugs in [Chromatic storybooks/frontpage](https://www.chromatic.com/builds?appId=5be26744d2f6250024a9117d)
 7. Pull request
 
 ## Running the project locally
@@ -34,6 +34,46 @@ Gatsby is used for basic routing and static site generation.
 
 1. yarn start
 
+#### Docs content
+
+The content for the documentation section is in the `docs/` subdirectory of the Storybook monorepo: https://github.com/storybookjs/storybook/tree/next/docs.
+
+To run this app while editing those files, checkout both this repository and the monorepo, and link them from this app:
+
+```
+yarn link-monorepo-docs path/to/monorepo
+```
+
+Alternatively, if you just want to serve the current content, run:
+
+```
+yarn extract-monorepo-docs $branch
+```
+
+### Release notes
+
+Release notes are stored in the src/content/releases directory as `.md` files. The name of the file corresponds with the version (major.minor) of the release and will be used to populate the link to the specific release from the releases page.
+
+Within the release's `.md` file, frontmatter is used to create a page title, while the rest of the content is parsed using `gatsby-transformer-remark` and styled with selectors in `src/styles/formatting.js`.
+
+### Search
+
+Search within the docs is powered by [DocSearch](https://docsearch.algolia.com/). In order for this to work, an environment variable is required:
+
+`GATSBY_ALGOLIA_API_KEY`
+
+In development and with local production builds, that environment variable can be configured with `.env` files as explaned [here](https://www.gatsbyjs.com/docs/environment-variables/#client-side-javascript). The `GATSBY_` prefix ensures that the variable is available in client-side code. 
+
+How to setup on your machine:
+
+1. Create a .env.development file locally
+2. Get the key here: https://app.netlify.com/sites/storybook-frontpage/settings/deploys#environment
+3. Add `GATSBY_ALGOLIA_API_KEY=key` to the file from step 1
+
+In deploy previews and production deploys, that variable is set with Netlify's build variables.
+
+The site is crawled every 24 hours so any updates will be reflected in that amount of time.
+
 ## Tooling
 
 This project uses these tools to make our job easier.
@@ -42,7 +82,7 @@ This project uses these tools to make our job easier.
 
 Master and branches are automatically deployed by Netlify every commit.
 
-### 🖼 Visual testing by [Chromatic](https://www.chromaticqa.com/library?appId=5be26744d2f6250024a9117d)
+### 🖼 Visual testing by [Chromatic](https://www.chromatic.com/library?appId=5be26744d2f6250024a9117d)
 
 All stories in the Storybook are automatically visual tested on desktop and mobile each commit. Ensure all baselines are ✅ accepted before merging.
 

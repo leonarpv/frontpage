@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StaticQuery, graphql } from 'gatsby';
 import styled from 'styled-components';
 
 import { styles } from '@storybook/design-system';
-import PageLayout from '../../layout/PageLayout';
 import PageTitle from '../../layout/PageTitle';
 import TeamItem from './TeamItem';
 import ContributorItem from './ContributorItem';
@@ -60,10 +58,11 @@ const contributors = [
   },
 ];
 
-export function PureTeamScreen({ data: { gitHubRepoData }, ...props }) {
-  const { title, ogImage, urls = {} } = useSiteMetadata();
+export function PureTeamScreen({ ...props }) {
+  const { title, ogImage, urls = {}, contributorCount } = useSiteMetadata();
+  const { gitHub = {} } = urls;
   return (
-    <PageLayout {...props}>
+    <>
       <SocialGraph
         title={`Team | ${title}`}
         desc="Storybook is maintained by hundreds of contributors worldwide and guided by a steering committee."
@@ -130,11 +129,11 @@ export function PureTeamScreen({ data: { gitHubRepoData }, ...props }) {
         />
         <ContributorItem
           contributors={contributors}
-          contributorCount={`+${gitHubRepoData.contributorCount}`}
-          gitHubUrl={`${gitHubRepoData.url}/graphs/contributors`}
+          contributorCount={`+${contributorCount}`}
+          gitHubUrl={gitHub.contributors}
         />
       </Team>
-    </PageLayout>
+    </>
   );
 }
 
@@ -143,17 +142,5 @@ PureTeamScreen.propTypes = {
 };
 
 export default function TeamScreen({ ...props }) {
-  return (
-    <StaticQuery
-      query={graphql`
-        query TeamScreenQuery {
-          gitHubRepoData {
-            contributorCount
-            url
-          }
-        }
-      `}
-      render={data => <PureTeamScreen data={data} {...props} />}
-    />
-  );
+  return <PureTeamScreen {...props} />;
 }
